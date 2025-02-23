@@ -12,7 +12,6 @@ Tracer_Mod_Wettness.py # Model config 1 - SAS paramameter depends on soil moistu
 Tracer_Mod_Ptresh_Wettness.py # Model config 2 - SAS param depends on soil moisture in conditional to threshold precipitation for preferential flow  
 Track_Tracer_Mod_Wetness.py # Variant config 1 allowing manual parameter changes for root zone & GW when running the model 
 Track_Tracer_Mod_Ptresh_Wetness.py # Variant config 1 allowing  manual parameter changes for root zone & GW when running the model 
----
 
 ## Running the Model
 ### Example Test Run
