@@ -209,18 +209,18 @@ class Tracer_Mod(object):
     ## Tracer Snow Storage
     def Tracer_sampling_snow(self, Prec, ConcP, RM, Tr_length, alpha, Beta, **kwargs):
             #Np.zeros to create matrix  nxn for  age distribution of water in the snow bucket
-            rm_Age_dist = np.zeros(Tr_length+1, dtype=float64) # Rain melt age distribution at each time step
+            rm_Age_dist = np.zeros(Tr_length+1, dtype=float64) # Rain melt age distribution updated for at each time step
             rm_Conc_dist = np.zeros(Tr_length+1, dtype=float64) #Rain and melt concentration age distribution at each time step
             Flux_RM =   np.zeros(Tr_length+1, dtype=float64) #Total Flux of water out of the snow bucket
-            RM_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) # RM age distribution matrix TTD
-            Conc_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) #Concentration matrix RM
-            RM_flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64) #Total Flux of water out of the snow bucket matrix
+            RM_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) # RM age distribution matrix TTD*RM
+            Conc_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) # RM Concentration matrix 
+            RM_flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64) #RM  Flux matrix 
             #Storage 
-            ss_Age_dist = np.zeros(Tr_length+1, dtype=float64) #Stored water age distribution at each time step 
-            ss_vol_dist = np.zeros(Tr_length+1, dtype=float64) #Stored water volume age distribution (Con*SS) at each time step
+            ss_Age_dist = np.zeros(Tr_length+1, dtype=float64) #Stored water age distribution updated at each time step 
+            ss_vol_dist = np.zeros(Tr_length+1, dtype=float64) #Stored water volume age distribution updated  (Con*SS) at each time step
             ss_vol_dist_in = np.zeros(Tr_length+1, dtype=float64) #Stored water input volume age distribution (Con*SS) at each time step
-            SS_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) # Storage age distribution matrix 
-            SS_Flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64) #Total Flux of water out of the snow bucket matrix
+            SS_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) # Storage age distribution matrix RTD*SS
+            SS_Flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64) # Flux matrix of the snow bucket matrix
             # Lopp over the time series
             for i in range(Tr_length):
                 #Rain and melt sampling
@@ -243,23 +243,23 @@ class Tracer_Mod(object):
 
     def Tracer_sampling_Si(self, RM_Age_MR,  Conc_Age_MR, pe, ei,  Tr_length, alpha, Beta, x):
             #Prepare the input and output data format 
-            Pe_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #Output Age Distribution  each time step
-            Pe_Conc_dist = np.zeros(Tr_length+1, dtype=float64) # interseption out concantration distribution each time step
-            Flux_Pe = np.zeros(Tr_length+1, dtype=float64) #Total Flux of water out of the interception bucket
-            Si_Age_dist = np.zeros(Tr_length+1, dtype=float64) # interseption  storage age distribution each time step
-            Si_vol_dist = np.zeros(Tr_length+1, dtype=float64) # Storage volume distribution each time step
-            Si_vol_dist_in = np.zeros(Tr_length+1, dtype=float64) # Storage volume distribution as input to the next time step 
-            Si_Age_MR =  np.zeros((Tr_length+1,Tr_length+1), dtype=float64) # interseption storage age distribution matrix
-            Si_Flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64) #Total Flux of water out of the interception bucket matrix
-            Pe_Conc_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) #Concentration matrix effective Pe
-            Pe_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) #Efective Pe age distribution matrix
-            Pe_Flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64) #Total Flux of pe
+            Pe_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Pe_Conc_dist = np.zeros(Tr_length+1, dtype=float64) 
+            Flux_Pe = np.zeros(Tr_length+1, dtype=float64) 
+            Si_Age_dist = np.zeros(Tr_length+1, dtype=float64) 
+            Si_vol_dist = np.zeros(Tr_length+1, dtype=float64) 
+            Si_vol_dist_in = np.zeros(Tr_length+1, dtype=float64) 
+            Si_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) 
+            Si_Flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64)
+            Pe_Conc_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64)
+            Pe_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64) 
+            Pe_Flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64) 
             # Evaporation fluxes 
-            Ei_Age_dist = np.zeros(Tr_length+1,  dtype=float64) # EiOutput Age Distribution eachtime step
-            Ei_Conc_dist = np.zeros(Tr_length+1, dtype=float64) # Evaporation concantration distribution for each time steps
-            Ei_Age_MR =  np.zeros((Tr_length+1,Tr_length+1), dtype=float64)  #Ei Main Matrix age distribution 
-            Ei_Flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64) #Total Flux of Ei  water out of the storage
-            Flux_Ei = np.zeros(Tr_length+1, dtype=float64) #Total Flux of water out of the interception bucket
+            Ei_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Ei_Conc_dist = np.zeros(Tr_length+1, dtype=float64) 
+            Ei_Age_MR =  np.zeros((Tr_length+1, Tr_length+1), dtype=float64)  
+            Ei_Flux_MR = np.zeros((Tr_length+1, Tr_length+1), dtype=float64) 
+            Flux_Ei = np.zeros(Tr_length+1, dtype=float64) 
             #Tracer balance interseption
             TB_si = np.zeros(Tr_length+1, dtype=float64)
             # Lopp over the time series
@@ -290,32 +290,32 @@ class Tracer_Mod(object):
     def Tracer_sampling_SR(self, Pe_Age_MR, Pe_Conc_MR, rtot, ea, rs, Tr_length, alpha, Beta, x, Srmax, ConSuAvg):
                 ##loop for root zone balance 
                 #fast responce rechage
-                rf_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #fast responce Age Distribution  each time step
-                rf_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) #fast responce Concentration Distribution  each time step
-                rf_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #fast responce Age Distribution TTD
-                rf_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #fast responce output Concentration Distribution matrix for next input
-                Flux_rf = np.zeros(Tr_length+1,  dtype=float64) #fast responce output Flux Distribution matrix for next input
+                rf_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+                rf_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) 
+                rf_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+                rf_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+                Flux_rf = np.zeros(Tr_length+1,  dtype=float64) 
                 # Root zone Storage 
-                Sr_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #Storage  Age Distribution  each time step
-                Sr_conc_dist = np.zeros(Tr_length+1,  dtype=float64) #Storage  Concentration Distribution  each time step
-                Sr_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Storage  Age Distribution RTD
-                Sr_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Storage  Concentration Distribution matrix
-                Sr_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Storage  Flux Distribution matrix
-                Sr_vol_dist = np.zeros(Tr_length+1,  dtype=float64) #Storage  Volume Distribution  each time step
-                Sr_vol_dist_in = np.zeros(Tr_length+1,  dtype=float64) #Storage  Volume Distribution  each time step
+                Sr_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+                Sr_conc_dist = np.zeros(Tr_length+1,  dtype=float64) 
+                Sr_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+                Sr_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+                Sr_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+                Sr_vol_dist = np.zeros(Tr_length+1,  dtype=float64)
+                Sr_vol_dist_in = np.zeros(Tr_length+1,  dtype=float64) 
             
                 # ea
-                ea_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #Evaporation  Age Distribution  each time step
-                ea_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) #Evaporation  Concentration Distribution  each time step
-                ea_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Evaporation  Age Distribution TTD
-                ea_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Evaporation  Concentration Distribution matrix
-                Flux_ea = np.zeros(Tr_length+1,  dtype=float64) #Evaporation  Flux Distribution matrix for next input
+                ea_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+                ea_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) 
+                ea_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+                ea_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+                Flux_ea = np.zeros(Tr_length+1,  dtype=float64)
                 # rs
-                rs_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #Recharge  Age Distribution  each time step
-                rs_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) #Recharge  Concentration Distribution  each time step
-                rs_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Age Distribution TTD
-                rs_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Concentration Distribution matrix
-                Flux_rs = np.zeros(Tr_length+1,  dtype=float64) #Recharge  Flux Distribution matrix for next input
+                rs_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+                rs_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) 
+                rs_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+                rs_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+                Flux_rs = np.zeros(Tr_length+1,  dtype=float64)
 
                 Sr_Age_dist[0] = Srmax/2.0 ## initial condition
                 Sr_vol_dist_in[0] =  ConSuAvg*(Srmax/2.0) ## initial condition
@@ -355,25 +355,25 @@ class Tracer_Mod(object):
     def Rf_division(self, rf_Age_MR, rf_Conc_MR, Tr_length, cp, cn ):
         ## Divtions Here  for fast and overland flows
         ## rfs fast responce to slow responce
-        rfs_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Age Distribution TTD
-        rfs_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Concentration Distribution matrix
-        rfs_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Flux Distribution matrix
-        Flux_rfs = np.zeros((Tr_length+1),  dtype=float64) #Recharge  Flux Distribution matrix
+        rfs_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        rfs_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        rfs_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        Flux_rfs = np.zeros((Tr_length+1),  dtype=float64) 
         #rfn  fast responce 
-        rfn_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Age Distribution TTD
-        rfn_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Concentration Distribution matrix
-        rfn_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Flux Distribution matrix
-        Flux_rfn = np.zeros((Tr_length+1),  dtype=float64) #Recharge  Flux Distribution matrix
+        rfn_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        rfn_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        rfn_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        Flux_rfn = np.zeros((Tr_length+1),  dtype=float64) 
         #rff propotion of fast responce going to  fast responce
-        rff_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Age Distribution TTD
-        rff_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Concentration Distribution matrix
-        rff_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Recharge  Flux Distribution matrix
-        Flux_rff = np.zeros((Tr_length+1),  dtype=float64) #Recharge  Flux Distribution matrix
+        rff_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        rff_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        rff_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64)
+        Flux_rff = np.zeros((Tr_length+1),  dtype=float64) 
         #Qo propotion of fast responce going tostream directly 
-        Qo_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Overland flow  Concentration Distribution matrix
-        Qo_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Overland f low  Age Distribution TTD
-        Qo_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Overland flow  Flux Distribution matrix
-        Flux_Qo = np.zeros((Tr_length+1),  dtype=float64) #Overland flow  Flux Distribution matrix
+        Qo_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        Qo_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        Qo_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+        Flux_Qo = np.zeros((Tr_length+1),  dtype=float64)
         
         # first divition of fast responce
         rfs_Age_MR = (1-cp)*rf_Age_MR
@@ -399,28 +399,28 @@ class Tracer_Mod(object):
     #Tracer fast responce
 
     def Tracer_sampling_Sf(self, rfn_Age_MR, rfn_Conc_MR, Qof, Qf, Tr_length, alpha, Beta, x, Sfmax):
-            Qf_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #fast responce Age Distribution  each time step
-            Qf_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) #fast responce Concentration Distribution  each time step
-            Qf_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #fast responce Age Distribution TTD
-            Flux_Qf = np.zeros((Tr_length+1),  dtype=float64) #fast responce Flux Distribution matrix
+            Qf_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Qf_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Qf_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            Flux_Qf = np.zeros((Tr_length+1),  dtype=float64) 
             #QOF 
-            Qof_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #overland flow Age Distribution  each time step
-            Qof_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) #overland flow Concentration Distribution  each time step
-            Qof_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #overland flow Age Distribution TTD
-            Flux_Qof = np.zeros((Tr_length+1),  dtype=float64) #overland flow Flux Distribution matrix
+            Qof_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Qof_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Qof_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            Flux_Qof = np.zeros((Tr_length+1),  dtype=float64) 
             #ET
             #Storage 
-            Sf_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #Storage  Age Distribution  each time step
+            Sf_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
             Sf_Age_dist[0] = Sfmax/2
-            Sf_conc_dist = np.zeros(Tr_length+1,  dtype=float64) #Storage  Concentration Distribution  each time step
-            Sf_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Storage  Age Distribution RTD
-            Sf_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Storage  Concentration Distribution matrix
-            Sf_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #Storage  Flux Distribution matrix
-            Sf_vol_dist = np.zeros(Tr_length+1,  dtype=float64) #Storage  Volume Distribution  each time step
-            Sf_vol_dist_in = np.zeros(Tr_length+1,  dtype=float64) #Storage  Volume Distribution  each time step
+            Sf_conc_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Sf_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64)
+            Sf_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            Sf_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            Sf_vol_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Sf_vol_dist_in = np.zeros(Tr_length+1,  dtype=float64) 
             Sf_vol_dist_in[0] = 0.0 ## initial condition
 
-            TB_sf = np.zeros(Tr_length+1,  dtype=float64) #Storage  Age Distribution  each time step
+            TB_sf = np.zeros(Tr_length+1,  dtype=float64)
             # Lopp over the time series
             for i in range(Tr_length):
                 Qof_Age_dist,  Qof_Conc_dist, Sf_Age_dist,  Qof_Conc, Sf_vol_dist, Qof_Flux = self.SAS_sampling(Sf_Age_dist, Sf_vol_dist_in, rfn_Age_MR[:,i], Qof[i], rfn_Conc_MR[:,i],alpha, Beta)
@@ -443,25 +443,25 @@ class Tracer_Mod(object):
     ## Tracer Slow responce 
     def Tracer_sampling_SG(self, Qin_Age_MR, Conc_in_MR, Qstot, Ql, Tr_length, alpha, Beta, x,  SSp, ConAvg):
             #outs 
-            Qstot_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #slow responce Age Distribution  each time step
-            Qstot_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) #slow responce Concentration Distribution  each time step
-            Qstot_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #slow responce Age Distribution TTD
-            Qstot_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #slow responce Concentration Distribution matrix
-            Flux_Qstot = np.zeros((Tr_length+1),  dtype=float64) #slow responce Flux Distribution matrix
+            Qstot_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Qstot_Conc_dist = np.zeros(Tr_length+1,  dtype=float64)
+            Qstot_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            Qstot_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64)
+            Flux_Qstot = np.zeros((Tr_length+1),  dtype=float64) 
             #Loses
-            Ql_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #slow responce Age Distribution  each time step
-            Ql_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) #slow responce Concentration Distribution  each time step
-            Ql_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #slow responce Age Distribution TTD
-            Ql_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #slow responce Age Distribution TTD
-            Ql_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #slow responce Concentration Distribution matrix
-            Flux_Ql = np.zeros((Tr_length+1),  dtype=float64) #slow responce Flux Distribution matrix
+            Ql_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Ql_Conc_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            Ql_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            Ql_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            Ql_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            Flux_Ql = np.zeros((Tr_length+1),  dtype=float64) 
             ## SLow Responcew Flux
-            SSa_Age_dist = np.zeros(Tr_length+1,  dtype=float64) #slow responce Age Distribution  each time step
-            SSa_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #slow responce Age Distribution TTD
-            SSa_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #slow responce Concentration Distribution matrix
-            SSa_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) #slow responce Flux Distribution matrix
-            SSa_vol_dist_in = np.zeros(Tr_length+1,  dtype=float64) #slow responce Volume Distribution  each time step
-            TB_Ss = np.zeros(Tr_length+1,  dtype=float64) #slow responce tracer balance 
+            SSa_Age_dist = np.zeros(Tr_length+1,  dtype=float64) 
+            SSa_Age_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64)
+            SSa_Conc_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            SSa_Flux_MR = np.zeros((Tr_length+1,Tr_length+1),  dtype=float64) 
+            SSa_vol_dist_in = np.zeros(Tr_length+1,  dtype=float64) 
+            TB_Ss = np.zeros(Tr_length+1,  dtype=float64)  
             SSa_Age_dist[0] =  SSp ## initial condition
             SSa_vol_dist_in[0] = SSa_Age_dist[0]*ConAvg ## initial condition for input
             for i in range(Tr_length):

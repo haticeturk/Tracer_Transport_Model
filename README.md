@@ -6,18 +6,18 @@ This repository contains Python code for a *[Tracer Transport Model](https://doi
 Türk, H., Stumpp, C., Hrachowitz, M., Schulz, K., Strauss, P., Blöschl, G., & Stockinger, M. (2024). Soil moisture and precipitation intensity control the transit time distribution of quick flow in a flashy headwater catchment. Hydrology and Earth System Sciences Discussions, 2024, 1-33. https://doi.org/10.5194/hess-2024-359
 
 ## Repository Structure
-Data folder includes the Data_testcsv. # Example dataset for test runs.
-Model_Run.py is Script demonstrating model calibration & tracer tracking 
-Tracer_Mod_Wettness.py # Model config 1 - SAS paramameter depends on soil moisture  for preferential flow 
-Tracer_Mod_Ptresh_Wettness.py # Model config 2 - SAS param depends on soil moisture in conditional to threshold precipitation for preferential flow  
-Track_Tracer_Mod_Wetness.py # Variant config 1 allowing manual parameter changes for root zone & GW when running the model 
-Track_Tracer_Mod_Ptresh_Wetness.py # Variant config 1 allowing  manual parameter changes for root zone & GW when running the model 
+- Data folder includes the Data_test.csv. # Example dataset for test runs.
+- Model_Run.py is Script demonstrating model calibration & tracer tracking 
+- Tracer_Mod_Wettness.py # Model config 1 - SAS paramameter depends on soil moisture  for preferential flow 
+- Tracer_Mod_Ptresh_Wettness.py # Model config 2 - SAS param depends on soil moisture in conditional to threshold precipitation for preferential flow  
+- Track_Tracer_Mod_Wetness.py # Variant config 1 allowing manual parameter changes for root zone & GW when running the model 
+- Track_Tracer_Mod_Ptresh_Wetness.py # Variant config 1 allowing  manual parameter changes for root zone & GW when running the model 
 
 ## Running the Model
 ### Example Test Run
 An example of model calibration and tracer tracking is provided in **`Model_Run.py`**, which uses the synthetic dataset from **`Data/Data_test/`**. To run a test:
 
-### Model Setups
+### Models 
 
 1. **Tracer_Mod_Wettness.py**  
    - Uses uniform SAS functions for all compartments, except the **root zone’s preferential flow**.  
@@ -29,7 +29,7 @@ An example of model calibration and tracer tracking is provided in **`Model_Run.
 
 3. **Track_Tracer_Mod_Wetness.py** / **Track_Tracer_Mod_Ptresh_Wetness.py**  
    - Allows users to modify shape parameters for both the **root zone** and **groundwater** compartments when calling the model.  
-   - Ideal if you want to experiment with different time-varying parameters. 
+   - Ideal if you want to experiment with different SAS  parameters. 
 
 ```
 @article{turk2024soil,
